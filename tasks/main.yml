@@ -39,7 +39,7 @@
   command: autoreconf -i chdir=/tmp/duo
 
 - name: Configure duo source
-  command: ./configure --prefix=/usr chdir=/tmp/duo
+  command: ./configure --prefix=/usr --with-pam chdir=/tmp/duo
 
 - name: Build duo
   command: make chdir=/tmp/duo
@@ -48,10 +48,10 @@
   command: make install chdir=/tmp/duo
   become: true
 
-- name: Clear duo source dir
-  file:
-    path: /tmp/duo
-    state: absent
+#- name: Clear duo source dir
+#  file:
+#    path: /tmp/duo
+#    state: absent
 
 - name: Install duo config
   template:
@@ -61,6 +61,27 @@
     group: 0
     mode: 0600
   become: true
+
+- name: Change requesite to sufficient
+  lineinfile:
+    path: /etc/pam.d/sshd
+    regexp: "auth sufficient pam_ldap.so try_first_pass"
+    line: "auth requisite pam_ldap.so try_first_pass"
+    backrefs: yes
+  become: yes
+
+- name: Install pam_duo module
+  lineinfile:
+    path: /etc/pam.d/sshd
+    insertbefore: "auth required pam_deny.so"
+    line: "auth sufficient /lib64/security/pam_duo.so"
+  become: true
+
+- name: Remove common-auth
+  lineinfile:
+    path: /etc/pam.d/sshd
+    regexp: "[^#]@include common-auth"
+    line: "#@include common-auth"
 
 - name: Restart ssh
   service: name=sshd state=restarted
