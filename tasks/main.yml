@@ -35,12 +35,6 @@
     accept_hostkey: yes
     version: master
 
-- name: Patch duo for multiuser support
-  lineinfile:
-    dest: /tmp/duo/login_duo/login_duo.c
-    regexp: 'ctx->duouser != NULL'
-    line: 'if (ctx->config != NULL) {'
-
 - name: Generate duo configure
   command: autoreconf -i chdir=/tmp/duo
 
@@ -66,35 +60,6 @@
     owner: sshd
     group: 0
     mode: 0600
-  become: true
-
-- name: Install helper script
-  template:
-    src: login_duo_multi
-    dest: /usr/sbin/login_duo_multi
-    owner: root
-    mode: 0755
-  become: true
-
-- name: Add duo to ssh login
-  lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^ForceCommand'
-    line: 'ForceCommand /usr/sbin/login_duo_multi'
-  become: true
-
-- name: Disable ssh PermitTunnel
-  lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^PermitTunnel'
-    line: 'PermitTunnel no'
-  become: true
-
-- name: Disable ssh AllowTcpForwarding
-  lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^AllowTcpForwarding'
-    line: 'AllowTcpForwarding no'
   become: true
 
 - name: Restart ssh

@@ -1,3 +1,0 @@
-#!/bin/bash
-read -rp "Enter Duo user to authenticate as: " user
-/usr/sbin/login_duo -f $(echo $user | tr -cd '[[:alnum:]]._-')
