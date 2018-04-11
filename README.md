@@ -1,3 +1,10 @@
+# Why Was This Forked?
+Current playbook includes a feature we do not need but I'd rather remove that feature (the multi-user accommodation) then try to write my own playbook from scratch.
+
+# Who Forked This?
+
+Adam Panzer @apanzerj / e-squared
+
 # Multiuser SSH 2FA Via Duo
 This repository contains an Ansible role used to set up [Duo](http://duo.com/)-based
 2-factor authentication SSH logins. The role supports CentOS- and Debian- based systems, and has
