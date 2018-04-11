@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  author: Amida Technology Solutions
-  description: Role to install and configure multi-user Duo for 2FA on SSH logins
-  company: Amida Technology Solutions
+  author: Adam Panzer
+  description: Role to install and configure duo unix. Forked from https://github.com/amida-tech/ansible-duo-ssh
+  company: Optimizely Inc
   license: MIT
   min_ansible_version: 2.0
   platforms:
